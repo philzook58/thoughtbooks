@@ -42,10 +42,7 @@ Axiom ocaml_lam' : forall a b, (Code a -> Code b) -> Code (a -> b).
 Extract Inlined Constant ocaml_lam' => "". (* This seems questionable. There is no way the ocaml compiler doesn't compile those identity function away right? *)
 Arguments ocaml_lam' {a} {b}.
 
-(* This is an applicative apply
-
-Maybe being applicative makes the most conceptual sense. We can't inspect Code values to change control flow in some sense. Although obviously we do at compile time. I'm not sure.
- *)
+(* This is a bind instance? *)
 Axiom ocaml_app : forall {a b : Type},  Code (a -> b) -> Code a -> Code b.
 Extract Inlined Constant ocaml_app => "".
 
@@ -128,8 +125,6 @@ Axiom ocaml_fst : forall {a b : Type}, Code (a * b) -> Code a.
 (* What difference does it make to have these be code or not?
 Or to have the whole thing wrapped in code?
 
-
-
    *)
 
 Extract Constant make => "fun i def _ -> ( make i def , ())".
@@ -145,61 +140,22 @@ Extract Constant set => "fun r i x _ -> let () = r.(i) <- x in (() , ())".
 
 (* lift is also a return instance for Code. *)
 Axiom lift : forall {a : Type}, a -> Code a.
-Extract Inlined Constant lift => "(*lift*)".
-Check ocaml_app.
 
-Check (fun a b => fun (f : Code a -> Code b) => (lift f)).
 
 (* Does this imply we getr a quote unquote from do notation? 
 Can I write lam in terms oif lift and apply?
 
 
-
+It does imply i can wrtie join : Code Code -> Code
 
 (Code a -> Code b) -> Code (a -> b)
 fun f => ocaml_apply (lift f)
-
-
-apply is applicative applu
-
-lam is ~ inverse to apply
-
-lam (fun x => apply f x) ~ f x ?
-
-Are lam and apply in an adjunction?
-it feels like they are pseudo inverses
-
-Between static and dynamic cat?
-
-(->s Code a  Code b ) -> (Code (->d a b))
-
-
 
   *)
 
 
 
 (* ! *)
-
-(*
-Maybe we hsould just use IO monad discipline
-It avoids the explciit unit that we're passing.
-we get monad notation
-
-
-can we derive a bind from lam lift and app?
-
-Code a -> (a -> Code b) -> Code b
-fun x f => 
-
-
-Maybe Code is already sufficient and we don't need IO on top? Uh no. I think we could throw away effects
-
-*)
-
-Axiom for_ : nat -> nat -> (nat -> World -> World) -> World.
-Extract Inlined Constant for_ => "(fun i j f -> for  k = i to j do (f k ()) done)   )".
-
 
 (*
 
@@ -225,72 +181,14 @@ Instance natcsp : CSP nat :=
 
 Axiom fix_ : forall {a : Type}, Code (a -> a) -> Code a.
 (* Extract Inlined Constant fix_ *)
-Definition plus2 (x : Code nat) (y : Code nat) : Code nat :=  ocaml_app (ocaml_app (lift plus) x) y.
-Definition plustest := Eval cbv in  plus2 (lift 1) (lift 2).
-Extraction plustest.
-                                          
-
-Definition pow5 : Code (nat -> nat -> nat) :=
-  lift simple_pow. (* (let fix help := fun n x => match n with
-                                   |  O => 1
-                                   | S n =>  *)
-
-
-Require Import Floats.
-
-Open Scope float_scope.
-
-Eval compute in 1 + 0.5.
-
-Eval compute in 1 / 0.
-
-Require Import ExtrOCamlFloats.
-Definition foo : float := 1 + 0.5.
-Extraction foo.
-
+Definition plus2 := ocaml_app (ocaml_app plus).
+                                   
 Definition pow'''' : Code (nat -> nat -> nat) :=
   ocaml_lam (fun n => match n with
                       | O => ocaml_lam (fun _ => ocaml_lnat 1)
                       | S n' => ocaml_lam (fun x => ocaml_mul x (ocaml_app (ocaml_app pow'' n') x))
                       end)
 .
-
-
-(*
-
-The ocaml compiler is surprisngly literal
-On godbolt , the flambda compiler is msart enough to survive some abstractions and give indetical cdoe
-
-
-
-let cumsum (x : unit) : int =
-   let acc = ref 0 in
-   for i = 0 to 10 do
-      acc := !acc + i
-    done;
-    !acc
-
-let for_ m n k =  for i = m to n do k i done
-
-
-
-
-let cumsum2 (x : unit) : int =
-   let acc = ref 0 in
-    for_ 0 10 (fun i -> acc := !acc + i) ;
-    !acc
-
-    (*  These two ouptut identical code for flambda
-    flambda also doesn't allocate for the closure version of acc
-    I think flambda also removes unnecceary units
-    flambd inlines is smart
-    *)
-
-*)
-
-
-
-
 
 
 (* No. There isn't a way to write this, right?
