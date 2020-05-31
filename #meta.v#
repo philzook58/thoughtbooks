@@ -515,7 +515,40 @@ DynSta3 s a :=
 
 
 
+ *)
+
+(*
+
+
+quote and unquote.
+quasiquotation
+
+It feels like I may need a cps transformation
+
+because while quote feels like recursive a -> Code a. This is not really a function in some sense either
+splice doesn't seem like it is a function.
+suppose I wnat to splice in a nat 
+(Code nat -> b) -> b 
+(nat -> b) -> b
+
+(DynSta nat -> b) -> b
+
+
+
+he ocnitnaution :( 1 + $(2 + 3))
+
+continuation fun s => :(1 + s)
+
+=>
+
+This is the conintuation I'd want
+fun s => app (app ocaml_plus (ocaml_nat 1)) s
+
+splice : Code a -> (Code a -> b) -> b
+
+
 *)
+
 
 Definition testy {a} : DynSta2 _ (a -> a) := lambo (fun x => x).
 Print testy.
