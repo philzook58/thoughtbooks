@@ -10,27 +10,42 @@ Class Symantics (repr : Type -> Type) :=
 
 
 Require Import Extraction.
-Axiom Code : Type -> Type.
-Extract Constant Code "'a" => "'a".
-
-
-
-Axiom ocaml_lam : forall {a b: Type}, (Code a -> Code b) -> Code (a -> b).
-Extract Inlined Constant ocaml_lam => "".
-Axiom ocaml_app : forall {a b : Type},  Code (a -> b) -> Code a -> Code b.
-Extract Inlined Constant ocaml_app => "".
-
-Axiom ocaml_let : forall a b, a -> (a -> b) -> b.
-Extract Constant ocaml_let => "(fun x f -> f x)".
-
-Axiom ocaml_add : Code nat -> Code nat -> Code nat.
-Extract Inlined Constant ocaml_add => "(+)".
-Axiom ocaml_mul : Code nat -> Code nat -> Code nat.
-Extract Inlined Constant ocaml_mul => "(*)".
+Axiom PCode : Type -> Type.
+Extract Constant PCode "'a" => "'a".
 
 (* lift is also a return instance for Code? *)
-Axiom lift : forall {a : Type}, a -> Code a.
-Extract Inlined Constant lift => "(*lift*)".
+Axiom block : forall {a : Type}, a -> PCode a.
+Extract Inlined Constant block => "(*block*)".
+
+
+
+
+
+(* Definition ocaml_app {a b} (f : PCode (a -> b)) (x : PCode a) : PCode b := ocaml_bind f (fun f' => ocaml_bind x (fun x' => block (f' x'))).
+Definition ocaml_lam {a b} (f : PCode a -> PCode b) : PCode (a -> b) := fun x =>  (f (block x)) : (a -> PCode b)  *)
+
+Axiom ocaml_lam : forall {a b: Type}, (PCode a -> PCode b) -> PCode (a -> b).
+Extract Inlined Constant ocaml_lam => "".
+
+Axiom ocaml_app : forall {a b : Type},  PCode (a -> b) -> PCode a -> PCode b.
+Extract Inlined Constant ocaml_app => "".
+
+
+
+Axiom ocaml_add : PCode nat -> PCode nat -> PCode nat.
+Extract Inlined Constant ocaml_add => "(+)".
+Axiom ocaml_mul : PCode nat -> PCode nat -> PCode nat.
+Extract Inlined Constant ocaml_mul => "(*)".
+
+(* This is moggi's let. *)
+Axiom ocaml_bind : forall {a b}, PCode a -> (a -> PCode b) -> PCode b.
+Extract Inlined Constant ocaml_bind => "(fun x f -> f x)".
+
+                                                                  
+
+
+
+
 Check ocaml_app.
 Check ocaml_lam.
 
