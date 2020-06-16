@@ -14,8 +14,7 @@ Class Symantics (repr : Type -> Type) := {
 Record R a := { unR : a }.
 Arguments Build_R {a}.
 Arguments unR {a}.
-Check Build_R.
-Check Build_R.
+
 
 
 Fixpoint gassyfix {a} n (f : a -> option a) : option a := match n with
