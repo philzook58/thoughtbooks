@@ -13,8 +13,31 @@ fof( right_id, axiom, ![F] : comp(F,dom(F),F) ).
 fof( comp_assoc, axiom, ![F, G, H, FG, GH, FGH1, FGH2] : comp(F,G,FG) & comp(FG,H,FGH1) & comp(F,GH,FGH2) & comp(G,H,GH) => FGH1 = FGH2  ).
 
 
+fof( obj_def, axiom, ![F] : obj(F) <=> dom(F) = F ).
+fof( is_id_def,  axiom, ![F] : is_id(F) <=> obj(F) ). % this is a proposition that it is an identity morphism
+fof( id_def,  axiom, ![F] : id(F) = F <=> obj(F) ). % this is just a convenience wrapper. It's a partial function
 
-% how can i enumerate morphsisms?
+% setup some object names
+fof( a_obj, axiom, obj(a) ).
+fof( b_obj, axiom, obj(b) ).
+fof( c_obj, axiom, obj(c) ).
+fof( d_obj, axiom, obj(d) ).
+fof( x_obj, axiom, obj(x) ).
+
+fof( f_cod, axiom, cod(f) = a ).
+fof( f_dom, axiom, dom(f) = c ).
+fof( g_cod, axiom, cod(g) = c ).
+fof( g_dom, axiom, dom(g) = b ).
+fof( pa_cod, axiom, cod(pa) = a ).
+fof( pa_dom, axiom, dom(pa) = x ).
+fof( pa_cod, axiom, cod(pa) = a ).
+fof( pa_dom, axiom, dom(pa) = x ).
+
+
+fof(commute_square_def, axiom, commute_square(F,G,H,K) <=>   )
+
+
+% how can I enumerate morphsisms?
 %fof( one_cat, axiom, ![F] : F = e )
 fof(two_cat, axiom, ![F] : (F = e | F = i) & cod(e) = e & comp(i,i,e)).
 
