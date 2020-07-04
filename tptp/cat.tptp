@@ -1,0 +1,41 @@
+
+
+
+% axioms of a category
+% we would resupply this for every category involved?
+fof( dom_cod_id, axiom, ![X] : dom(cod(X)) = cod(X) & cod(dom(X)) = dom(X)  ).
+fof( comp_is_single_valued, axiom, ![F, G, FG1, FG2] : comp(F,G,FG1) & comp(F,G,FG2) => FG1 = FG2   ).
+fof( comp_objects_middle, axiom, ![F, G] : ? [FG] : comp(F,G,FG) <=> dom(F) = cod(G) ).
+fof( comp_cod_dom, axiom, ![F, G, FG] : comp(F,G,FG) => dom(G) = dom(FG) & cod(F) = cod(FG) ).
+%fof( id_axiom, axiom, ![F] : comp(F,cod(F),F) & comp(dom(F),F,F) ).
+fof( left_id, axiom, ![F] : comp(cod(F),F,F) ).
+fof( right_id, axiom, ![F] : comp(F,dom(F),F) ).
+fof( comp_assoc, axiom, ![F, G, H, FG, GH, FGH1, FGH2] : comp(F,G,FG) & comp(FG,H,FGH1) & comp(F,GH,FGH2) & comp(G,H,GH) => FGH1 = FGH2  ).
+
+
+
+% how can i enumerate morphsisms?
+%fof( one_cat, axiom, ![F] : F = e )
+fof(two_cat, axiom, ![F] : (F = e | F = i) & cod(e) = e & comp(i,i,e)).
+
+% fof(e_is_id, axiom, cod(e) = e).
+% fof(e_dom, conjecture, dom(e) = e).
+% fof(e_dom, conjecture, comp(e,e,e)).
+fof(e_id, conjecture, comp(e,i,i)).
+
+
+
+% setup of diagram
+%fof(   m_is_mono, axiom , ![F G H] : comp(m, F, H) & comp(m,G,H) => F = G )
+%fof(   cod_m , axiom , cod(m) = idA )
+%fof(   dom_m , axiom , dom(m) = idB )
+%fof(    , axiom , dom(m) = idB )
+
+%fof(   sqaure_commute, axiom,  comp(p1, m, H) & comp(p2,f,H  )    )
+%fof(   square_is_pullback,   ![ ]   comp(p1, m, H) & comp(p2,F,H  ) )  
+
+%fof(   )
+
+
+% functor
+
