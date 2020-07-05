@@ -1,0 +1,42 @@
+
+include('cat.tptp').
+
+fof(monic_def, axiom,  
+    ![M] : (monic(M) <=> (! [F,G,H] : ((comp(M, F, H) & comp(M,G,H)) => F = G)))).
+
+% The scope matters.
+%fof(epic_def, axiom ,  
+%    ![E, F, G, H] : (epic(E) <=> ((comp(F, E, H) & comp(G,E,H)) => F = G))).
+
+fof(commute_square_def, axiom, 
+    ![F,G,H,K] : (commute_square(F,G,H,K) <=> (? [M] : (comp(F,G,M) & comp(H,K,M))))).
+
+%fof(product_def, axiom,
+%    ![X,Y,Z,P1,P2] : product(X, Y, Z, P1, P2) <=> 
+%        (cod(P1) = X & cod(P2) = Y & dom(P1) = Z & dom(P2) = Z) &
+%        ![F,G] : ((cod(F) = X & cod(G) = Y & dom(F) = dom(G)) =>
+%            ?[FG] : comp(FG,P1,F) & comp(FP,P2,G))
+%    ).
+
+%fof(pullback_def, axiom,
+%   ![F,G,P1,P2] : (pullback(F,G,P1,P2) <=> % actually commute square might already imply everything
+%        ((dom(P1) = dom(P2) & cod(P1) = dom(F) & cod(P2) = dom(F) & cod(F) = cod(G) & commute_square(F,P1,G,P2)) &
+%        (![Q1,Q2] : ((dom(Q1) = dom(Q2) & cod(Q1) = cod(P1) & cod(Q2) = cod(P2) & commute_square(F,Q1,G,Q2)) => 
+%            (?[U] :  (comp(P1,U,Q1) & comp(P2,U,Q2)))))))).
+fof(pullback_def, axiom,
+   ![F,G,P1,P2] : (pullback(F,G,P1,P2) <=>
+        (commute_square(F,P1,G,P2) &
+        ![Q1,Q2] : (commute_square(F,Q1,G,Q2) => 
+                   ?[U] : (comp(P1,U,Q1) & comp(P2,U,Q2)))))).
+
+%fof(pullback_monic, conjecture, ![M, F, P1,P2] : ((monic(M) & pullback(F,M,P1,P2)) => monic(P2))).
+
+fof(pullback_monic, conjecture, ![M] : (monic(M)  => (![F,P1,P2] : (pullback(F,M,P1,P2) => monic(P2))))).
+%fof(what, conjecture, $true).
+
+% fof(cat_is_cartesian, axiom, ![X,Y] : ? [Z, P1, P2] : product(X,Y,Z,P1,P2) ).
+% fof( def_prod,func, axiom : ![X,Y] : product( X,Y,prodZ(X,Y), prodp1(X,Y), prodp1(X,Y)  )).
+% same thing though since cat is cartesian gets skolemised.
+
+
+
