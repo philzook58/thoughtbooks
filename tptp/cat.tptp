@@ -3,13 +3,15 @@
 
 % axioms of a category
 % we would resupply this for every category involved?
-fof( dom_cod_id, axiom, ![X] : (dom(cod(X)) = cod(X) & cod(dom(X)) = dom(X))  ).
-fof( comp_is_single_valued, axiom, ![F, G, FG1, FG2] : ((comp(F,G,FG1) & comp(F,G,FG2)) => FG1 = FG2)   ).
-fof( comp_objects_middle, axiom, ![F, G] : (? [FG] : (comp(F,G,FG) <=> dom(F) = cod(G))) ).
-fof( comp_cod_dom, axiom, ![F, G, FG] : (comp(F,G,FG) => (dom(G) = dom(FG) & cod(F) = cod(FG))) ).
-%fof( id_axiom, axiom, ![F] : comp(F,cod(F),F) & comp(dom(F),F,F) ).
+fof( dom_cod, axiom, ![X] : dom(cod(X)) = cod(X)).
+fof( cod_dom, axiom, ![X] : cod(dom(X)) = dom(X)).
+fof( comp_is_unique, axiom, ![F, G, FG1, FG2] : ((comp(F,G,FG1) & comp(F,G,FG2)) => FG1 = FG2)   ).
+fof( comp_objects_middle, axiom, ![F, G] : ((? [FG] : comp(F,G,FG)) <=> dom(F) = cod(G))).
+fof( comp_dom, axiom, ![F, G, FG] : (comp(F,G,FG) => dom(G) = dom(FG))).
+fof( comp_cod, axiom, ![F, G, FG] : (comp(F,G,FG) => cod(F) = cod(FG))).
 fof( left_id, axiom, ![F] : comp(cod(F),F,F) ).
 fof( right_id, axiom, ![F] : comp(F,dom(F),F) ).
+% I've heard that composition axioms cause churn?
 fof( comp_assoc, axiom, ![F, G, H, FG, GH, FGH1, FGH2] : ((comp(F,G,FG) & comp(FG,H,FGH1) & comp(F,GH,FGH2) & comp(G,H,GH)) => FGH1 = FGH2  )).
 
 
