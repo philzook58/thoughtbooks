@@ -29,9 +29,13 @@ simp(f).
 simp(g).
 %simp(fan(A,B)).
 
-depth(snd, 0).
-depth(fst, 0).
-depth(snd, 0).
+
+nat(z).
+sat(s(X)) :- nat(X).
+
+depth(snd, z).
+depth(fst, z).
+depth(snd, z).
 depth(fan(F,G), N) :- depth(F,NF), depth(G,NG), N is max(NF,NG) + 1.
 depth(comp(F,G), N) :- depth(F,NF), depth(G,NG), N is max(NF,NG) + 1. 
 
